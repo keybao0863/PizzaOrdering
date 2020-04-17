@@ -1,0 +1,27 @@
+{% extends "orders/base.html" %}
+
+{% block body %}
+
+<!-- TODO:  -->
+<ul>
+  {% for item in order_items%}
+    <li>{{item.Menu_item.name}}
+      {% for topping in item.toppings.all%}
+        {{topping}}
+      {% endfor %}
+      X {{item.quantity}}
+
+    </li>
+
+  {% endfor %}
+
+  <p>Subtotal: {{price}}</p>
+
+  <form class="" action="{% url 'place_order' price %}" method="post">
+    <button type="button" name="button">Order</button>
+  </form>
+  
+
+</ul>
+
+{% endblock %}

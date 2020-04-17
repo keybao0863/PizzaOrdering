@@ -1,0 +1,74 @@
+{% extends "orders/base.html" %}
+
+{% block body %}
+<h1>Menu</h1>
+
+
+
+  <div class="container-fluid">
+    {% for item in items %}
+
+    <div class="row" id="menu-row">
+      <div class="col-4">
+        <p>{{item.id}}: {{item.name}} - ${{item.price}}  </p>
+      </div>
+      <div class="col-8">
+        <form id="topping-form" action="{% url 'order' item.id %}" method="post" class="form-inline">
+          {% csrf_token %}
+
+          {% if item.topping_number > 0 %}
+          <div class="form-group topping-option">
+            <label for="topping1"></label>
+            <select class="form-control" name="topping1" required id="topping1">
+              <option value="" disabled selected>Select your topping</option>
+              {% for topping in toppings%}
+              <option value="{{topping.name}}">{{topping.name}}</option>
+              {%endfor%}
+            </select>
+          </div>
+
+
+          {% endif %}
+
+          {% if item.topping_number > 1 %}
+
+          <div class="form-group topping-option">
+            <label for="topping2"></label>
+            <select class="form-control" name="topping2" required id="topping2">
+              <option value="" disabled selected>Select your topping</option>
+              {% for topping in toppings%}
+              <option value="{{topping.name}}">{{topping.name}}</option>
+              {%endfor%}
+            </select>
+          </div>
+
+          {% endif %}
+
+          {% if item.topping_number > 2 %}
+
+          <div class="form-group topping-option">
+            <label for="topping3"></label>
+            <select class="form-control" name="topping3" required id="topping3">
+              <option value="" disabled selected>Select your topping</option>
+              {% for topping in toppings%}
+              <option value="{{topping.name}}">{{topping.name}}</option>
+              {%endfor%}
+            </select>
+          </div>
+
+
+          {% endif %}
+
+            <button type="submit" name="button" class="btn btn-outline-success
+            btn-sm pull-right">Add to cart</button>
+
+          </form>
+      </div>
+
+
+    </div>
+    <hr>
+
+{% endfor %}
+</div>
+{% endblock %}
