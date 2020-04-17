@@ -3,25 +3,30 @@
 {% block body %}
 
 <!-- TODO:  -->
-<ul>
-  {% for item in order_items%}
-    <li>{{item.Menu_item.name}}
-      {% for topping in item.toppings.all%}
-        {{topping}}
-      {% endfor %}
-      X {{item.quantity}}
+  <div class="container-fluid"  style="margin-left:25%">
+    {% for item in order_items%}
+    <div class="container-fluid">
+    <p>{{item.Menu_item.name}}
+        {% for topping in item.toppings.all%}
+          {{topping}}
+        {% endfor %}
+        X {{item.quantity}}</p>
+    </div>
+    {% endfor %}
 
-    </li>
+    <div class="container-fluid">
+      <h3>Subtotal: {{price}}</h3>
 
-  {% endfor %}
+      <form class="" action="{% url 'place_order' order.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" name="button" class="btn btn-success">Order</button>
+      </form>
+    </div>
 
-  <p>Subtotal: {{price}}</p>
+  </div>
 
-  <form class="" action="{% url 'place_order' price %}" method="post">
-    <button type="button" name="button">Order</button>
-  </form>
-  
 
-</ul>
+
+
 
 {% endblock %}

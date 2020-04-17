@@ -11,14 +11,15 @@ from django.contrib.auth.decorators import login_required
 def index(request):
 
     # Check is user logged in
-    if not request.user.is_authenticated:
-        return render(request, "orders/login.html", {"message":None})
+    # if not request.user.is_authenticated:
+    #     return render(request, "orders/login.html", {"message":None})
 
     #If logged in
     context = {
         "user" : request.user
     }
     return render(request, "orders/user.html", context)
+
 
 def login_view(request):
     # Render view
@@ -37,10 +38,11 @@ def login_view(request):
     else:
         return render(request, "orders/login.html", {"message":"invalid credentials."})
 
+
 def logout_view(request):
     logout(request)
-    print("logged out")
-    return render(request, "orders/login.html", {"message": "Logged out."})
+    return render(request, "orders/user.html", {"message": "Logged out."})
+
 
 def signup_view(request):
 
@@ -62,6 +64,7 @@ def signup_view(request):
 
     return render(request, "orders/login.html", {"message":"Signup successful"})
 
+
 @login_required(login_url="/login")
 def menu_view(request):
     # Make sure there is a logged in user
@@ -78,6 +81,7 @@ def menu_view(request):
 
     return render(request, "orders/menu.html", context)
 
+
 def add_to_cart(request, item_id):
 
     #Retrieve menu item
@@ -92,15 +96,11 @@ def add_to_cart(request, item_id):
         cur_order = Order(user=current_user)
         cur_order.save()
 
-
-
-
-
     # Append items to the open order
     order_item = Order_item(order = cur_order, Menu_item = item, quantity=1)
     order_item.save()
+
     #Add toppings, if any
-    print("topping number" ,item.topping_number)
     if(item.topping_number>0):
         topping = Topping.objects.filter(name= request.POST['topping1']).first()
         print(topping)
@@ -111,12 +111,12 @@ def add_to_cart(request, item_id):
     if(item.topping_number>2):
         topping = Topping.objects.filter(name= request.POST['topping3']).first()
         order_item.toppings.add(topping)
-
     order_item.save()
 
     # Show message and return view
     messages.info(request, "Successfully added to cart")
     return redirect(reverse(menu_view))
+
 
 @login_required(login_url="/login")
 def cart_view(request):
@@ -140,11 +140,22 @@ def cart_view(request):
 
     #Display
     context = {
+        "order":cur_order,
         "order_items":order_items,
         "price":sum
     }
     return render(request, "orders/cart.html", context)
 
+
 @login_required(login_url="/login")
-def place_order(request):
-    
+def place_order(request, order_id):
+
+    #Marking order as complete
+    cur_order = Order.objects.filter(pk=order_id).first()
+    cur_order.is_ordered=True
+    cur_order.save()
+    return render(request, "orders/success.html")
+
+
+def success_view(request):
+    return render(request, "order/success.html")

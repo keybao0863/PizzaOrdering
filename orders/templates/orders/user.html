@@ -1,16 +1,32 @@
 {% extends "orders/base.html" %}
 
 {% block body %}
+<!--Mask-->
+<div id="intro" class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-6" id="welcome-box">
+      <h1>Welcome!</h1>
+      {% if user.is_authenticated %}
+      <h3>You are currently logged in as: {{ user.username }}</h3>
+      <a href="{%url 'menu'%}"><button type="button" name="button"
+        class = "btn-success">View our menu</button></a>
+      {% else %}
+      <a href="{%url 'login'%}"><button type="button" name="button"
+        class = "btn-primary">Login</button></a>
+        <a href="{%url 'signup'%}"><button type="button" name="button"
+          class = "btn-success">Signup</button></a>
+      {% endif %}
 
-{% if message %}
-    <div>
-        {{ message }}
     </div>
-{% endif %}
+  </div>
+  {% if message %}
+      <div>
+          {{ message }}
+      </div>
+  {% endif %}
 
-<h1>Hello, {{ user.first_name }}</h1>
-<ul>
-    <li>Currently logged in as: {{ user.username }}</li>
+</div>
+<!--/.Mask-->
 
-</ul>
+
 {% endblock %}

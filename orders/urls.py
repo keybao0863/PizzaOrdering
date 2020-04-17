@@ -10,5 +10,6 @@ urlpatterns = [
     path("menu", views.menu_view, name="menu"),
     re_path(r'^add-to-cart/(?P<item_id>\d+)/$', views.add_to_cart, name="order"),
     path("cart", views.cart_view, name="cart"),
-    path("place_order", views.place_order, name="place_order")
+    re_path(r'^place_order/(?P<order_id>\d+)/$', views.place_order, name="place_order"),
+    path("success", views.success_view, name="success")
 ]
